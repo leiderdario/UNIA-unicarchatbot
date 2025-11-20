@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Send, Smile } from 'lucide-react';
 
 interface MessageInputProps {
     onSend: (message: string) => void;
@@ -34,28 +35,43 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSend, disabled }) 
         }
     }, [input]);
 
+    const hasText = input.trim().length > 0;
+
     return (
-        <form onSubmit={handleSubmit} className="p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
-            <div className="max-w-4xl mx-auto relative flex items-end gap-2">
+        <form onSubmit={handleSubmit} className="p-4 bg-slate-900/50 dark:bg-slate-900/50 backdrop-blur-xl border-t border-slate-700/50">
+            <div className="max-w-4xl mx-auto relative flex items-end gap-3 bg-slate-800/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-2">
+                {/* Emoji Button */}
+                <button
+                    type="button"
+                    className="p-2 text-gray-400 hover:text-gray-200 transition-colors rounded-lg hover:bg-slate-700/50 flex-shrink-0"
+                    aria-label="Agregar emoji"
+                >
+                    <Smile className="w-5 h-5" />
+                </button>
+
+                {/* Input */}
                 <textarea
                     ref={textareaRef}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Escribe un mensaje a UNIA..."
+                    placeholder="Escribe tu mensaje..."
                     disabled={disabled}
                     rows={1}
-                    className="w-full p-3 pr-12 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none max-h-32 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all disabled:opacity-50"
+                    className="flex-1 bg-transparent border-none focus:outline-none resize-none max-h-32 text-gray-100 placeholder-gray-500 py-2 text-sm sm:text-base"
                 />
+
+                {/* Send Button */}
                 <button
                     type="submit"
-                    disabled={!input.trim() || disabled}
-                    className="absolute right-2 bottom-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    disabled={!hasText || disabled}
+                    className={`p-2.5 rounded-lg transition-all duration-300 flex-shrink-0 ${hasText && !disabled
+                            ? 'bg-gradient-to-r from-blue-600 to-emerald-500 text-white hover:scale-105 shadow-lg shadow-blue-500/25'
+                            : 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                        }`}
                     aria-label="Enviar mensaje"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                        <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
-                    </svg>
+                    <Send className="w-5 h-5" />
                 </button>
             </div>
         </form>
